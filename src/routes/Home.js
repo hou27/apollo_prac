@@ -55,8 +55,8 @@ const Home = () => {
   return (
     <Container>
       <Header>
-        <Title>Apollo 2020</Title>
-        <Subtitle>I love GraphQL</Subtitle>
+        <Title>Apollo Prac</Title>
+        <Subtitle>GraphQL is Amazing</Subtitle>
       </Header>
       {loading && <Loading>Loading...</Loading>}
       {!loading &&
