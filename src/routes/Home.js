@@ -6,11 +6,13 @@ import {
 import styled from "styled-components";
 import Movie from "../components/Movie";
 
+// @client -- client 측에 있는 항목이므로 백엔드가 아닌 client 측에 있다고 알려줌.
 const GET_MOVIES = gql`
   {
     movies {
-      id
-      medium_cover_image
+    	id
+    	medium_cover_image
+		isLiked @client
     }
   }
 `;
@@ -70,7 +72,7 @@ const Home = () => {
 		{loading && <Loading>Loading...</Loading>}
 		<Movies>
 		  {data?.movies?.map(m => (	// optional chaining
-			<Movie key={m.id} id={m.id} bg={m.medium_cover_image} />
+			<Movie key={m.id} id={m.id} isLiked={m.isLiked} bg={m.medium_cover_image} />
 		  ))}
 		</Movies>
 	</Container>
