@@ -4,13 +4,24 @@ import styled from "styled-components";
 import {
   InMemoryCache,
   useMutation,
+  useQuery,
   gql
 } from "@apollo/client";
 
 // @client를 통해 mutation을 client로 보냄.(backend로 보내는 것 방지)
 const LIKE_MOVIE = gql`
-  mutation likeMovie($id: Int!) {
-    likeMovie(id: $id) @client
+  mutation likeMovie($id: Int!, $isLiked: Boolean!) {
+    likeMovie(id: $id, isLiked: $isLiked) @client
+  }
+`;
+
+const GET_MOVIE = gql`
+  query getMovie($id: Int!) {
+    movie(id: $id) {
+	  id
+      medium_cover_image
+	  isLiked @client
+    }
   }
 `;
 
@@ -43,50 +54,18 @@ const Poster = styled.div`
 
 
 const Movie = ({ id, bg, isLiked }) => {
-	const [likeMovie] = useMutation(LIKE_MOVIE, {
-		variables: { id: +id }
-	});
-	
 	// const cache = new InMemoryCache();
 	
-	// const existingMovieData = cache.readQuery({
-	// // 2. 현재 캐시에 저장되어있는 데이터를 가져온다.
-	// query: gql`{
-	// 		movie(id: $id) {
-	// 			id
-	// 			medium_cover_image
-	// 			isLiked @client
-	// 		}
-	// 	}`,
-	// variables: { id: +id }
-	// });
-	
-	// cache.writeQuery({ // 캐시 업데이트!
-	// query: gql`{
-	// 		movie(id: $id) {
-	// 			id
-	// 			medium_cover_image
-	// 			isLiked @client
-	// 		}
-	// 	}`,
-	// variables: {
-	// id: `Movie:${id}`, // GET_MESSAGES 쿼리는 매개변수로 roomID를 받는다 꼭 설정해주자! 꼭!!!
-	// },
-	// data: {
-	// 		Movie: {
-	// 			id: `Movie:${id}`,
-	// 			medium_cover_image: "also can change this value",
-	// 			isLiked: true
-	// 		},
-	// },
-	// });
+	const [toggleMovie] = useMutation(LIKE_MOVIE, {
+		variables: { id: parseInt(id), isLiked }
+	});
 	
 	return (
 		<Container>
 			<Link to={`/${id}`}>
 				<Poster bg={bg} />
 			</Link>
-			<button onClick={isLiked ? null : likeMovie}>
+			<button onClick={isLiked ? null : toggleMovie}>
 				{isLiked ? "Unlike" : "Like"}
 			</button>
 		</Container>
