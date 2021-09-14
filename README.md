@@ -2,6 +2,12 @@
 
 Built with React, Apollo and Graphql  
 
+```
+goorm 실행 url, port
+https://reactjs-prac-ldxqa.run.goorm.io:3000
+https://gqlserver.run.goorm.io:4000
+```
+
 [styled-components](https://styled-components.com/)
 [reactrouter](https://reactrouter.com/web/guides/quick-start)
 [reactapollo](https://www.apollographql.com/docs/react/)
