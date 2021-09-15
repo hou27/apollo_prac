@@ -24,94 +24,35 @@ const client = new ApolloClient({
             isLiked: () => false,
         },
         Mutation: {
-            likeMovie /*toggleLikeMovie*/: (_, { id, isLiked }, { cache }) => {
-                cache.writeData({
-                    // 3.4.3버전에선 사용 불가
-                    id: `Movie:${id}`,
-                    data: {
-                        isLiked: !isLiked,
-                    },
-                });
-            },
-            // likeMovie: (_, { id, isLiked }, { cache }) => {
-            //     console.log(cache.data.data, `Movie:${id}`, typeof id);
-            //     // doesn't work;;
-            //     // const cacheData = cache.data.data;
-            //     // cache.data.data = cacheData.filter((data) => {
-            //     // 	return data.id === id ? data.isLiked = !isLiked : null;
-            //     // })
-            //     const existingMovieData = cache.readQuery({
-            //         // 현재 캐시에 저장되어있는 데이터를 가져온다.
-            //         query: gql`{
-            //     		Movie(id: $id) {
-            //     			id
-            //     			medium_cover_image
-            //     			isLiked @client
-            //     		}
-            //     	}`,
-            //         variables: {
-            //             // Provide any required variables here
-            //             id: `Movie:${id}`,
-            //         },
-            //     });
-            //     // query: gql`{
-            //     // 		movie(id: 35558) {
-            //     // 			id
-            //     // 			medium_cover_image
-            //     // 			isLiked @client
-            //     // 		}
-            //     // 	}`,
-            //     console.log(existingMovieData, typeof id);
-            //     cache.writeQuery({
-            //         // 캐시 업데이트
-            //         query: GET_MOVIE,
-            //         variables: {
-            //             id: id,
-            //         },
-            //         data: {
-            //             Movie: {
-            //                 id: id,
-            //                 medium_cover_image: 'also can change this value',
-            //                 isLiked: true,
-            //             },
-            //         },
-            //     });
-            // },
-            likeMovie: (_, { id, isLiked }, { cache }) => {
-                const queryResult = cache.readQuery({
+            toggleLikeMovie: (_, { id, isLiked }, { cache }) => {
+                // cache.writeData({
+                //     // 3.4.3버전에선 사용 불가
+                //     id: `Movie:${id}`,
+                //     data: {
+                //         isLiked: !isLiked,
+                //     },
+                // });
+				cache.writeQuery({
                     query: gql`{
-						Movie(id: $id) @client {
+						movie(id: $id){
 							id
 							medium_cover_image
+							isLiked @client
 						}
 					}`,
-                    variables: {
+                    data: {
+                        movie: {
+							__typename: 'Movie',
+                            id,
+                            medium_cover_image: "https://source.unsplash.com/random",
+                            isLiked: !isLiked,
+                        },
+                    },
+					variables: {
                         // Provide any required variables here
-                        id: `Movie:${id}`,
+                        id,
                     },
                 });
-                const existingMovieData = queryResult;
-                console.log(existingMovieData, typeof id);
-                if (queryResult) {
-                    const data = {
-                        Movie: {
-                            id: id,
-                            medium_cover_image: 'also can change this value',
-                            isLiked: true,
-                        },
-                    };
-                    cache.writeQuery({
-                        query: gql`{
-						Movie(id: $id) @client {
-							id
-							medium_cover_image
-						}
-					}`,
-                        data,
-                    });
-                    return data.Movie;
-                }
-                return [];
             },
         },
     },

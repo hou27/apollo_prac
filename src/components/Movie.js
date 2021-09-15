@@ -4,29 +4,11 @@ import styled from 'styled-components';
 import { InMemoryCache, useMutation, useQuery, gql } from '@apollo/client';
 
 // @client를 통해 mutation을 client로 보냄.(backend로 보내는 것 방지)
-const LIKE_MOVIE = gql`
-  mutation likeMovie($id: Int!, $isLiked: Boolean!) {
-    likeMovie(id: $id, isLiked: $isLiked) @client
+const TOGGLE_MOVIE = gql`
+  mutation toggleLikeMovie($id: Int!, $isLiked: Boolean!) {
+    toggleLikeMovie(id: $id, isLiked: $isLiked) @client
   }
 `;
-
-const GET_MOVIE = gql`
-  query getMovie($id: Int!) {
-    movie(id: $id) {
-	  id
-      medium_cover_image
-	  isLiked @client
-    }
-  }
-`;
-
-const GET_CACHEMOVIE = gql`{
-	Movie(id: $id) {
-		id
-		medium_cover_image
-		isLiked @client
-	}
-}`;
 
 const Container = styled.div`
     height: 400px;
@@ -56,9 +38,7 @@ const Poster = styled.div`
 `;
 
 const Movie = ({ id, bg, isLiked }) => {
-    const cache = new InMemoryCache();
-
-    const [toggleMovie] = useMutation(LIKE_MOVIE, {
+    const [toggleMovie] = useMutation(TOGGLE_MOVIE, {
         variables: { id: parseInt(id), isLiked },
     });
 	
@@ -67,7 +47,7 @@ const Movie = ({ id, bg, isLiked }) => {
             <Link to={`/${id}`}>
                 <Poster bg={bg} />
             </Link>
-            <button onClick={isLiked ? null : toggleMovie}>
+            <button onClick={toggleMovie}>
 				{isLiked ? 'Unlike' : 'Like'}</button>
         </Container>
     );
