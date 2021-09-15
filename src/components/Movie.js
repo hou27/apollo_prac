@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { InMemoryCache, useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, /*useQuery,*/ gql } from '@apollo/client';
 
 // @client를 통해 mutation을 client로 보냄.(backend로 보내는 것 방지)
 const TOGGLE_MOVIE = gql`

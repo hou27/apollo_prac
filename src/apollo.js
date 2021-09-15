@@ -1,20 +1,5 @@
 import { InMemoryCache, ApolloClient, gql } from '@apollo/client';
 
-// const cache = new InMemoryCache();
-
-// https://velog.io/@yhe228/apollo-writeQuery-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-mutation%ED%9B%84-%EC%BA%90%EC%8B%9C-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%ED%95%98%EA%B8%B0
-// 참고할 것.
-
-const GET_MOVIE = gql`
-  query getMovie($id: Int!) {
-    movie(id: $id) {
-	  id
-      medium_cover_image
-	  isLiked @client
-    }
-  }
-`;
-
 const client = new ApolloClient({
     uri: 'https://gqlserver.run.goorm.io', // backend server (gql server playground)
     cache: new InMemoryCache(),
